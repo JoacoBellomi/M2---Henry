@@ -1,0 +1,61 @@
+warning: in the working copy of '03-ES6/homework/src/selector.js', LF will be replaced by CRLF the next time Git touches it
+[1mdiff --git a/03-ES6/homework/src/selector.js b/03-ES6/homework/src/selector.js[m
+[1mindex d068aaf..a395e6d 100644[m
+[1m--- a/03-ES6/homework/src/selector.js[m
+[1m+++ b/03-ES6/homework/src/selector.js[m
+[36m@@ -1,10 +1,6 @@[m
+[31m-var traverseDomAndCollectElements = function(matchFunc, startEl) {[m
+[32m+[m[32mvar traverseDomAndCollectElements = function(matchFunc, startEl = document.body) {[m
+   var resultSet = [];[m
+ [m
+[31m-  if (typeof startEl === "undefined") {[m
+[31m-    startEl = document.body;[m
+[31m-  }[m
+[31m-[m
+   // recorre el árbol del DOM y recolecta elementos que matchien en resultSet[m
+   // usa matchFunc para identificar elementos que matchien[m
+ [m
+[36m@@ -18,7 +14,12 @@[m [mvar traverseDomAndCollectElements = function(matchFunc, startEl) {[m
+ [m
+ var selectorTypeMatcher = function(selector) {[m
+   // tu código aquí[m
+[31m-  [m
+[32m+[m[32m  if(selector[0] === '#') return 'id';[m
+[32m+[m[32m  if(selector[0] === '.') return 'class';[m
+[32m+[m[32m  for(let i = 0; i < selector.length; i++){[m
+[32m+[m[32m    if(selector[i] === '.') return 'tag.class';[m
+[32m+[m[32m  }[m
+[32m+[m[32m  return 'tag';[m
+ };[m
+ [m
+ // NOTA SOBRE LA FUNCIÓN MATCH[m
+[36m@@ -30,13 +31,25 @@[m [mvar matchFunctionMaker = function(selector) {[m
+   var selectorType = selectorTypeMatcher(selector);[m
+   var matchFunction;[m
+   if (selectorType === "id") { [m
+[31m-   [m
+[32m+[m[32m    matchFunction = (elemento) => {[m
+[32m+[m[32m      return '#' + elemento.id === selector;[m
+[32m+[m[32m    }[m
+   } else if (selectorType === "class") {[m
+[31m-    [m
+[32m+[m[32m    matchFunction = (elemento) => {[m
+[32m+[m[32m      for(const clas of elemento.classList){[m
+[32m+[m[32m        if('.' + clas === selector) return true;[m
+[32m+[m[32m      }[m
+[32m+[m[32m      return false;[m
+[32m+[m[32m    }[m[41m [m
+   } else if (selectorType === "tag.class") {[m
+[31m-    [m
+[32m+[m[32m    matchFunction = (elemento) => {[m
+[32m+[m[32m      const [tag, clas] = selector.split('.');[m
+[32m+[m[32m      return tag === elemento.tagName.toLowerCase() && clas === elemento.className;[m
+[32m+[m[32m    }[m
+   } else if (selectorType === "tag") {[m
+[31m-    [m
+[32m+[m[32m    matchFunction = (elemento) => {[m
+[32m+[m[32m      return elemento.tagName.toLowerCase() === selector;[m
+[32m+[m[32m    }[m
+   }[m
+   return matchFunction;[m
+ };[m
